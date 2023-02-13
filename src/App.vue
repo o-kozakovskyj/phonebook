@@ -11,6 +11,7 @@ export default {
   },
   data() {
     return {
+      searchFilter: "",
       pageNumber: 1,
       newName: "",
       newNumber: "",
@@ -26,11 +27,23 @@ export default {
     paginatedPages() {
       const from = (this.pageNumber - 1) * this.CONTACTS_PER_PAGE;
       const to = from + this.CONTACTS_PER_PAGE;
-      return this.CONTACTS.slice(from, to);
+      return this.filteredContacts.slice(from, to);
+    },
+    filteredContacts() {
+      if (this.searchFilter === "") {
+        return this.CONTACTS;
+      }
+      return this.CONTACTS.filter((contact) =>
+        contact.name.indexOf(this.searchFilter)>-1
+      );
     },
   },
   methods: {
-    ...mapActions(["GET_CONTACTS_FROM_MOKAPI", "GET_CONTACTS_PER_PAGE"]),
+    ...mapActions([
+      "GET_CONTACTS_FROM_MOKAPI",
+      "GET_CONTACTS_PER_PAGE",
+      "DELETE_CONTACT",
+    ]),
     moment,
     getPageByNumber(page) {
       this.pageNumber = page;
@@ -53,7 +66,12 @@ export default {
         <div class="top-panel__actions">
           <div class="form-group">
             <span>Search：</span>
-            <input type="text" name="search" class="form-control" />
+            <input
+              type="text"
+              name="search"
+              class="form-control"
+              v-model="searchFilter"
+            />
           </div>
           <div class="form-group">
             <span>Contacts per page：</span>
@@ -61,8 +79,8 @@ export default {
               type="number"
               step="1"
               min="1"
-              v-model="CONTACTS_PER_PAGE"
-              @click="GET_CONTACTS_PER_PAGE(v)"
+              :value="CONTACTS_PER_PAGE"
+              @input="(e) => GET_CONTACTS_PER_PAGE(e.target.value)"
             />
           </div>
         </div>
@@ -91,8 +109,12 @@ export default {
                 }}
               </td>
               <td>
-                <DeleteIcon fillColor="#e7e7e7" />
-                <FileEditIcon fillColor="#e7e7e7" />
+                <span class="icon-box">
+                  <DeleteIcon
+                    fillColor="#e7e7e7"
+                    @click="DELETE_CONTACT(contact.id)" />
+                  <FileEditIcon fillColor="#e7e7e7"
+                /></span>
               </td>
             </tr>
           </tbody>
