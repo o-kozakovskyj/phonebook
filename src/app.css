@@ -62,8 +62,9 @@ cursor: pointer;
 .icon-box {
   cursor: pointer;
 }
-.btn {
-  width: 180px;
-  height: 40px;
+.btn__app {
   margin-top: 16px;
+}
+label {
+  margin-right: 4px;
 }
