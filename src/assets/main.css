@@ -14,6 +14,9 @@
   border: 1px solid #000;
   border-radius: 2px;
 }
+.btn:hover {
+  background: #d8d8d8;
+}
 button {
   cursor:pointer;
 }
