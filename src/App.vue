@@ -1,24 +1,30 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
-import ContactsTable from "./components/Table.vue";
-import ModalWindow from "./components/Modal.vue";
+import ContactsTable from "./components/Table/Table.vue";
+import ModalWindow from "./components/Modal/Modal.vue";
+import HeaderPanel from "./components/Header/Header.vue";
 import moment from "moment";
 export default {
   name: "App",
   components: {
     ContactsTable,
     ModalWindow,
+    HeaderPanel,
   },
 
   data() {
     return {
-      isModalVisible: false,
-      searchFilter: "",
       pageNumber: 1,
     };
   },
   computed: {
-    ...mapGetters(["CONTACTS", "CONTACTS_PER_PAGE"]),
+    ...mapGetters([
+      "CONTACTS",
+      "CONTACTS_PER_PAGE",
+      "IS_MODAL_VISIBLE",
+      "SEARCH_FILTER",
+      "SORTED_BY_DATE",
+    ]),
     pages() {
       return Math.ceil(this.filteredContacts.length / this.CONTACTS_PER_PAGE);
     },
@@ -28,17 +34,34 @@ export default {
       return this.filteredContacts.slice(from, to);
     },
     filteredContacts() {
-      if (this.searchFilter === "") {
-        return this.CONTACTS;
+      if (this.SEARCH_FILTER === "") {
+        return this.sortedContacts;
       } else {
-        return this.CONTACTS.filter(
-          (contact) => contact.name.indexOf(this.searchFilter) > -1
+        return this.sortedContacts.filter(
+          (contact) => contact.name.indexOf(this.SEARCH_FILTER) > -1
         );
+      }
+    },
+    sortedContacts() {
+      if (this.SORTED_BY_DATE === "ascend") {
+        return [...this.CONTACTS].sort((a, b) =>
+          a.createdAt.localeCompare(b.createdAt)
+        );
+      } else if (this.SORTED_BY_DATE === "descend") {
+        return [...this.CONTACTS].sort((a, b) =>
+          b.createdAt.localeCompare(a.createdAt)
+        );
+      } else {
+        return this.CONTACTS;
       }
     },
   },
   methods: {
-    ...mapActions(["GET_CONTACTS_FROM_MOKAPI", "GET_CONTACTS_PER_PAGE"]),
+    ...mapActions([
+      "GET_CONTACTS_FROM_MOKAPI",
+      "GET_CONTACTS_PER_PAGE",
+      "CHANGE_MODAL_VISIBILITY",
+    ]),
     moment,
     getPageByNumber(page) {
       this.pageNumber = page;
@@ -62,57 +85,30 @@ export default {
 <template>
   <div id="app">
     <header>
-      <div class="top-panel">
-        <h3 class="top-panel__title">Phone Book</h3>
-        <div class="top-panel__actions">
-          <form class="form-group">
-            <label>Search</label>
-            <input
-              type="text"
-              name="search"
-              class="form-control"
-              v-model="searchFilter"
-            />
-          </form>
-          <form class="form-group">
-            <label for="counter">Contacts per page:</label>
-            <input
-              name="counter"
-              type="number"
-              step="1"
-              max="100"
-              min="1"
-              v-model="CONTACTS_PER_PAGE"
-              @input="(e) => GET_CONTACTS_PER_PAGE(e.target.value)"
-            />
-          </form>
-        </div>
-      </div>
+      <HeaderPanel />
     </header>
     <main>
       <ContactsTable :contactsList="paginatedPages" />
-      <div class="container">
-        <div class="pagination">
-          <div
-            class="page"
-            v-for="page in pages"
-            :key="page"
-            @click="getPageByNumber(page)"
-            :class="{ page__selected: page === pageNumber }"
-          >
-            {{ page }}
-          </div>
+      <div class="pagination">
+        <div
+          class="page"
+          v-for="page in pages"
+          :key="page"
+          @click="getPageByNumber(page)"
+          :class="{ page__selected: page === pageNumber }"
+        >
+          {{ page }}
         </div>
       </div>
+      <button
+        type="button"
+        class="btn btn__app"
+        @click="CHANGE_MODAL_VISIBILITY(true)"
+      >
+        Add contact
+      </button>
+      <ModalWindow v-show="IS_MODAL_VISIBLE" />
     </main>
-    <footer>
-      <div class="panel-footer">
-        <button type="button" class="btn btn__app" @click="showModal">
-          Add contact
-        </button>
-        <ModalWindow v-show="isModalVisible" @close="closeModal" />
-      </div>
-    </footer>
   </div>
 </template>
 

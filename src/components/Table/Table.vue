@@ -1,10 +1,12 @@
 <script>
 import moment from "moment";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import DeleteIcon from "vue-material-design-icons/Delete.vue";
 import FileEditIcon from "vue-material-design-icons/FileEdit.vue";
+import ModalWindow from "../Modal/Modal.vue";
 export default {
   name: "ContactsTable",
+
   props: {
     contactsList: {
       type: Array,
@@ -16,11 +18,23 @@ export default {
   components: {
     DeleteIcon,
     FileEditIcon,
+    ModalWindow,
   },
 
   methods: {
-    ...mapActions(["DELETE_CONTACT"]),
+    ...mapActions([
+      "DELETE_CONTACT",
+      "CHANGE_MODAL_VISIBILITY",
+      "GET_CONTACT_TO_EDIT",
+    ]),
     moment,
+    getEditContact(contact) {
+      this.CHANGE_MODAL_VISIBILITY(true);
+      this.GET_CONTACT_TO_EDIT(contact);
+    },
+  },
+  computed: {
+    ...mapGetters(["IS_MODAL_VISIBLE"]),
   },
 };
 </script>
@@ -49,7 +63,11 @@ export default {
               fillColor="#e7e7e7"
               @click="DELETE_CONTACT(contact.id)"
             />
-            <FileEditIcon fillColor="#e7e7e7" />
+            <FileEditIcon
+              fillColor="#e7e7e7"
+              @click="getEditContact(contact)"
+            />
+            <ModalWindow v-show="IS_MODAL_VISIBLE" />
           </span>
         </td>
       </tr>
@@ -57,3 +75,4 @@ export default {
   </table>
 </template>
 }
+<style src="./table.css"></style>
