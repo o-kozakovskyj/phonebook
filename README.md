@@ -1,6 +1,13 @@
 # phonebook
 
-This template should help get you started developing with Vue 3 in Vite.
+### [Site link](https://vue-phone-book.netlify.app/)
+
+
+### The tech stack is:
+- [HTML5](https://en.wikipedia.org/wiki/HTML5)
+- [CSS3](https://en.wikipedia.org/wiki/Cascading_Style_Sheets)
+- [vue](https://v2.vuejs.org/)
+- [vuex](https://vuex.vuejs.org/)
 
 ## Recommended IDE Setup
 
@@ -33,3 +40,5 @@ npm run build
 ```sh
 npm run lint
 ```
+### Author
+Kozakovskyj Oleksij
