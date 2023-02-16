@@ -1,5 +1,4 @@
 
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -19,4 +18,10 @@
 }
 button {
   cursor:pointer;
+}
+input {
+  border-radius: 3px;
+}
+label {
+  font-weight: 700;
 }
