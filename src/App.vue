@@ -38,7 +38,10 @@ export default {
         return this.sortedContacts;
       } else {
         return this.sortedContacts.filter(
-          (contact) => contact.name.indexOf(this.SEARCH_FILTER) > -1
+          (contact) =>
+            contact.name
+              .toLowerCase()
+              .indexOf(this.SEARCH_FILTER.toLowerCase()) > -1
         );
       }
     },
