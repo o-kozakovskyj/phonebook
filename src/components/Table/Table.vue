@@ -40,7 +40,7 @@ export default {
 </script>
 <template>
   <table class="contacts">
-    <thead>
+    <thead class="contacts_header">
       <tr>
         <th>Name</th>
         <th>Phone Number</th>
