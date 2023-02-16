@@ -12,6 +12,7 @@
     "oh-vue-icons": "^1.0.0-rc3",
     "sourcemap-codec": "^1.4.8",
     "vue": "^2.7.7",
+    "vue-awesome": "^4.5.0",
     "vue-axios": "^3.5.2",
     "vue-material-design-icons": "^5.2.0",
     "vue-moment": "^4.1.0",

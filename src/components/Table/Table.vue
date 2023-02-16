@@ -60,11 +60,11 @@ export default {
         <td>
           <span class="icon-box">
             <DeleteIcon
-              fillColor="#e7e7e7"
+              fillColor="#524F4F"
               @click="DELETE_CONTACT(contact.id)"
             />
             <FileEditIcon
-              fillColor="#e7e7e7"
+              fillColor="#524F4F"
               @click="getEditContact(contact)"
             />
             <ModalWindow v-show="IS_MODAL_VISIBLE" />
